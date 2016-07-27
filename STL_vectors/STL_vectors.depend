@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1469642373 source:c:\users\sg0226162\desktop\fidessa\codeblocks\stl_vectors\main.cpp
+	<iostream>
+	<vector>
+	<algorithm>
+

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1469642899 source:c:\users\sg0226162\desktop\fidessa\codeblocks\stl_deque\main.cpp
+	<iostream>
+	<deque>
+
