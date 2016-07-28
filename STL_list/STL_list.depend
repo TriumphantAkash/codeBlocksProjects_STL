@@ -1,4 +1,6 @@
 # depslib dependency file v1.0
-1446671344 source:c:\users\sg0226162\desktop\fidessa\codeblocks\stl_list\main.cpp
+1469676989 source:c:\users\sg0226162\desktop\fidessa\codeblocks\stl_list\main.cpp
 	<iostream>
+	<list>
+	<algorithm>
 

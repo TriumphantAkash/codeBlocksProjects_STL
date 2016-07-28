@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1469720906 source:c:\users\sg0226162\desktop\fidessa\codeblocks\stl_set\main.cpp
+	<iostream>
+	<set>
+
