@@ -8,14 +8,18 @@ class ABC{
     char b;
 };
 
+std::ostream &operator<<(std::ostream &os, ABC const &m) {
+    return os << m.a;
+}
+
 int main()
 {
     ABC abc;
     abc.a = 10;
     abc.b = 'a';
 
-    cout<<abc.a<<endl;
-    cout<<(abc.a)*10<<endl;
+    cout<<abc<<endl;
+   // cout<<(abc.a)*10<<endl;
 
 
     return 0;

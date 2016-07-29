@@ -1,10 +1,9 @@
 #include <iostream>
 #include <string.h>
 
-///////////////////////////////////////////////////
 #define NUM_OF_BUCKETS 10
 
-//wrote a custom string class in order to overload == and + operator
+//wrote a custom string class in order to overload ==, =, * and + operator
 class string {
 public:
     char *s;
@@ -14,14 +13,7 @@ public:
         s = new char[size];
         strcpy(s,str);
     }
-    /*
-    void getstring(char *str)
-    {
-        size = strlen(str);
-        s = new char[size];
-        strcpy(s,str);
-    }
-*/
+    string(){}
     int operator*(int a){
         int sum=0;
         for(int i=0;i<size;i++){
@@ -50,6 +42,12 @@ public:
     }
 };
 
+//overloading operator<< for our string class
+std::ostream &operator<<(std::ostream &os, string const &obj) {
+    return os << obj.s;
+}
+
+//Node class
 template<typename K, typename V>
 class node{
 public:
@@ -58,6 +56,7 @@ public:
     node* next;
 };
 
+//HashMap class
 template<typename K, typename V>
 class HashMap
 {
@@ -66,6 +65,9 @@ private:
     node<K, V>* buckets[NUM_OF_BUCKETS];
 
 public:
+    //a simple hashfunction
+    //input: any type of key (handles string because * operator is overloaded)
+    //output: an unsigned long number
     unsigned long hashFunc(K key){
         return key*314;
     }
@@ -77,86 +79,97 @@ public:
         }
     }
 
+    //for inserting any key, value pair in the hashMap
+    //input: key - value pair
+    //output: void
     void insert(K key, V value){
-            int val = hashFunc(key)%10;
-            node<K, V>* temp = buckets[val];
+        int val = hashFunc(key)%10;
+        node<K, V>* temp = buckets[val];
 
-            if(buckets[val] == NULL){
-                node<K, V>* newNode = new node<K, V>();
-                newNode->key = key;
-                newNode->value = value;
-                newNode->next = NULL;
-                buckets[val] = newNode;
-                return;
-            }
+        if(buckets[val] == NULL){
+            node<K, V>* newNode = new node<K, V>();
+            newNode->key = key;
+            newNode->value = value;
+            newNode->next = NULL;
+            buckets[val] = newNode;
+            return;
+        }
 
-            while(temp->next != NULL){
-                if(temp->key == key){
-                    flag = true;
-                    temp->value = value;
-                    return;
-                }
-                temp=temp->next;
-            }
+        while(temp->next != NULL){
             if(temp->key == key){
+                flag = true;
                 temp->value = value;
                 return;
-            }else{
-                node<K, V>* newNode = new node<K, V>();
-                newNode->key = key;
-                newNode->value = value;
-                newNode->next = NULL;
-                temp->next = newNode;
             }
+            temp=temp->next;
+        }
+        if(temp->key == key){
+            temp->value = value;
+            return;
+        }else{
+            node<K, V>* newNode = new node<K, V>();
+            newNode->key = key;
+            newNode->value = value;
+            newNode->next = NULL;
+            temp->next = newNode;
+        }
 
     }
 
-
-     void traverse(){
-         for(int i =0;i<NUM_OF_BUCKETS;i++){
+    //for traversing through the hashmap, prints all the key-value pairs in the map
+    //input: void
+    //output: void
+    void traverse(){
+        for(int i =0;i<NUM_OF_BUCKETS;i++){
             std::cout<<"Bucket #"<<i<<") ";
             node<K, V>* temp = buckets[i];
             while(temp != NULL){
-                std::cout<<temp->key<<","<<(temp->value).s<<" ";
+                std::cout<<temp->key<<","<<(temp->value)<<" ";
                 temp=temp->next;
             }
             std::cout<<std::endl;
-         }
+        }
     }
+
+    //for finding a corresponding value for the supplied key
+    //input: key
+    //output: corresponding value for the key (last value in the map, if key not present)
     V find(K key){
-              int val = hashFunc(key)%10;;
-              node<K, V>* temp = buckets[val];
+        int val = hashFunc(key)%10;;
+        node<K, V>* temp = buckets[val];
 
 
-              while(temp != NULL){
-                if(temp->key == key){
-                    return temp->value;
-                }
-                temp=temp->next;
-              }
-              return temp->value;
-
+        while(temp != NULL){
+            if(temp->key == key){
+                return temp->value;
+            }
+            temp=temp->next;
+        }
+        return temp->value;
     }
 
+    //for removing a key value pair from the map
+    //input: key
+    //output: void
     void remove(K key){
-            int val = hashFunc(key)%10;
-            if(buckets[val]->key==key){                //need to separately handle this case because head of list changes if want to delete the first element
-                node<K, V>* temp = buckets[val];
-                buckets[val] = buckets[val]->next;
+        int val = hashFunc(key)%10;
+        if(buckets[val]->key==key){                //need to separately handle this case because head of list changes if want to delete the first element
+            node<K, V>* temp = buckets[val];
+            buckets[val] = buckets[val]->next;
+            delete temp;
+            return;
+        }
+        node<K, V>* temp = buckets[val];
+        struct node<K, V> * prev = temp;
+        while(temp != NULL){
+            if(temp->key==key){
+                prev->next = temp->next;
                 delete temp;
                 return;
             }
-            node<K, V>* temp = buckets[val];
-            struct node<K, V> * prev = temp;
-            while(temp != NULL){
-                if(temp->key==key){
-                    prev->next = temp->next;
-                    delete temp;
-                    return;
-                }
-                prev = temp;
-                temp=temp->next;
-            }
+            prev = temp;
+            temp=temp->next;
+        }
 
     }
 
@@ -166,88 +179,47 @@ public:
 
 int main()
 {
-    HashMap<int, string> hashMap;
+    HashMap<string, int> hashMap;
+
     string str1("Santa Clara");
-//    str1.getstring("Santa Clara");
-
     string str2("San Antonio");
- //   str2.getstring("San Antonio");
-
     string str3("San Jose");
-  //  str3.getstring("San Jose");
-
-    string str12("Pheonix");
-   // str12.getstring("Pheonix");
-
-    string str4("haha");
-  //  str4.getstring("haha");
+    string str4("Pheonix");
     string str5("Agra");
-   // str5.getstring("Agra");
     string str6("Hyderabad");
-  //  str6.getstring("Hyderabad");
     string str7("Chennai");
-  //  str7.getstring("Chennai");
     string str8("Delhi");
-  //  str8.getstring("Delhi");
     string str9("Mumbai");
-   // str9.getstring("Mumbai");
     string str10("Singopore");
-   // str10.getstring("Singopore");
-    string str11("California");
-    //str11.getstring("California");
-    hashMap.insert(2, str1);
-    hashMap.insert(3, str2);
-    hashMap.insert(3, str3);
-    hashMap.insert(4, str3);
-    hashMap.insert(5, str4);
-    hashMap.insert(6, str5);
-    hashMap.insert(7, str6);
-    hashMap.insert(8, str7);
-    hashMap.insert(9, str8);
-    hashMap.insert(23, str9);
+    string str11("Boston");
 
-
-    std::cout<<"the output of find function is: "<<hashMap.find(3).s<<std::endl;
-    std::cout<<"******************************"<<std::endl;
-    hashMap.traverse();
-    hashMap.remove(8);
-    std::cout<<"******************************"<<std::endl;
-    hashMap.traverse();
+    hashMap.insert(str1, 2);
+    hashMap.insert(str2, 3);
+    hashMap.insert(str3, 3);
+    hashMap.insert(str3, 4);
+    hashMap.insert(str4, 5);
+    hashMap.insert(str5, 6);
+    hashMap.insert(str6, 7);
+    hashMap.insert(str7, 8);
+    hashMap.insert(str8, 9);
+    hashMap.insert(str9, 23);
 /*
-    int choice = 99;
+    hashMap.insert(1.2, 2);
+    hashMap.insert(2.3, 3);
+    hashMap.insert(5.5, 3);
+    hashMap.insert(6.7, 4);
+    hashMap.insert(9.8, 5);
+    hashMap.insert(14.3, 6);
+    hashMap.insert(89.43, 7);
+    hashMap.insert(12.12, 8);
+    hashMap.insert(12.12, 9);
+    hashMap.insert(12.14, 23);
 
-	do{
-        std::cout<<"select a choice"<<std::endl;
-        std::cout<<"1) add a pair to HashMap"<<std::endl;
-        std::cout<<"2) remove element from the HashMap"<<std::endl;
-        std::cout<<"3) find a value by passing a key"<<std::endl;
-        std::cout<<"4) Display whole HashMap"<<std::endl;
-
-        std::cout<<"99) exit"<<std::endl;
-        std::cin>>choice;
-        switch(choice){
-        case 1:
-            add_element(&v);
-            break;
-        case 21:
-            print_approach1(&v);
-            break;
-        case 22:
-            print_approach2(&v);
-            break;
-        case 23:
-            print_approach3(&v);
-            break;
-        case 24:
-            print_approach4(&v);
-            break;
-        case 4:
-            sort_vector(&v);
-            break;
-        case 99:
-            break;
-        }
-	}while(choice != 99);
-	*/
+*/
+    std::cout<<"the output of find function is: "<<hashMap.find(str7)<<std::endl;
+    hashMap.traverse();
+    hashMap.remove(str2);
+    std::cout<<"/////////////////////////////////////////////////"<<std::endl;
+    hashMap.traverse();
     return 0;
 }
