@@ -14,7 +14,6 @@ public:
         size = strlen(str);
         s = new char[size];
         strcpy(s,str);
-      //  std::cout<<s<<std::endl;
     }
 
     int operator*(int a){
@@ -26,22 +25,14 @@ public:
     }
 
     void operator=(string ob){
-        //std::cout<<"current s is:"<<s<<std::endl;
-       // std::cout<<"passed string is:"<<ob<<std::endl;
         size = std::max(size,ob.size);
-       // std::cout<<"new size is:"<<size<<std::endl;
         s = new char[size+1];
         strcpy(s,ob.s);
     }
 
     void operator+(string ob){
-       // std::cout<<"current s is:"<<s<<std::endl;
-       // std::cout<<"passed string is:"<<ob<<std::endl;
         size = size+ob.size;
-       // std::cout<<"new size is:"<<size<<std::endl;
-        //s = new char[size+5];
         strcat(s,ob.s);
-      //  std::cout<<"\nConcatnated String is: "<<s;
     }
 
      bool operator==(string ob){
@@ -52,7 +43,6 @@ public:
         }
     }
 };
-   //need to define this function later
 
 template<typename K, typename V>
 class node{
@@ -61,9 +51,6 @@ public:
     V value;
     node* next;
 };
-
-//node<K, V>* head = NULL;
-
 
 template<typename K, typename V>
 class HashMap
@@ -117,6 +104,17 @@ public:
     }
 
 
+     void traverse(){
+         for(int i =0;i<NUM_OF_BUCKETS;i++){
+            std::cout<<"Bucket #"<<i<<") ";
+            node<K, V>* temp = buckets[i];
+            while(temp != NULL){
+                std::cout<<temp->key<<","<<(temp->value).s<<" ";
+                temp=temp->next;
+            }
+            std::cout<<std::endl;
+         }
+    }
         V find(K key){
               int val = hashFunc(key)%10;;
               node<K, V>* temp = buckets[val];
@@ -166,10 +164,16 @@ int main()
     string str2;
     str2.getstring("ashesh");
 
+    string str3;
+    str3.getstring("ashutosh");
+
     hashMap.insert(2, str1);
     hashMap.insert(3, str2);
+    hashMap.insert(3, str3);
 
-    std::cout<<"the output of find function is: "<<hashMap.find(2).s<<std::endl;
+    std::cout<<"the output of find function is: "<<hashMap.find(3).s<<std::endl;
+    std::cout<<"******************************"<<std::endl;
+    hashMap.traverse();
 
     return 0;
 }
