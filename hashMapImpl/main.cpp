@@ -9,13 +9,19 @@ class string {
 public:
     char *s;
     int size;
+    string(char* str){
+        size = strlen(str);
+        s = new char[size];
+        strcpy(s,str);
+    }
+    /*
     void getstring(char *str)
     {
         size = strlen(str);
         s = new char[size];
         strcpy(s,str);
     }
-
+*/
     int operator*(int a){
         int sum=0;
         for(int i=0;i<size;i++){
@@ -161,34 +167,34 @@ public:
 int main()
 {
     HashMap<int, string> hashMap;
-    string str1;
-    str1.getstring("Santa Clara");
+    string str1("Santa Clara");
+//    str1.getstring("Santa Clara");
 
-    string str2;
-    str2.getstring("San Antonio");
+    string str2("San Antonio");
+ //   str2.getstring("San Antonio");
 
-    string str3;
-    str3.getstring("San Jose");
+    string str3("San Jose");
+  //  str3.getstring("San Jose");
 
-    string str12;
-    str12.getstring("Pheonix");
+    string str12("Pheonix");
+   // str12.getstring("Pheonix");
 
-    string str4;
-    str4.getstring("haha");
-    string str5;
-    str5.getstring("Agra");
-    string str6;
-    str6.getstring("Hyderabad");
-    string str7;
-    str7.getstring("Chennai");
-    string str8;
-    str8.getstring("Delhi");
-    string str9;
-    str9.getstring("Mumbai");
-    string str10;
-    str10.getstring("Singopore");
-    string str11;
-    str11.getstring("California");
+    string str4("haha");
+  //  str4.getstring("haha");
+    string str5("Agra");
+   // str5.getstring("Agra");
+    string str6("Hyderabad");
+  //  str6.getstring("Hyderabad");
+    string str7("Chennai");
+  //  str7.getstring("Chennai");
+    string str8("Delhi");
+  //  str8.getstring("Delhi");
+    string str9("Mumbai");
+   // str9.getstring("Mumbai");
+    string str10("Singopore");
+   // str10.getstring("Singopore");
+    string str11("California");
+    //str11.getstring("California");
     hashMap.insert(2, str1);
     hashMap.insert(3, str2);
     hashMap.insert(3, str3);
@@ -207,5 +213,41 @@ int main()
     hashMap.remove(8);
     std::cout<<"******************************"<<std::endl;
     hashMap.traverse();
+/*
+    int choice = 99;
+
+	do{
+        std::cout<<"select a choice"<<std::endl;
+        std::cout<<"1) add a pair to HashMap"<<std::endl;
+        std::cout<<"2) remove element from the HashMap"<<std::endl;
+        std::cout<<"3) find a value by passing a key"<<std::endl;
+        std::cout<<"4) Display whole HashMap"<<std::endl;
+
+        std::cout<<"99) exit"<<std::endl;
+        std::cin>>choice;
+        switch(choice){
+        case 1:
+            add_element(&v);
+            break;
+        case 21:
+            print_approach1(&v);
+            break;
+        case 22:
+            print_approach2(&v);
+            break;
+        case 23:
+            print_approach3(&v);
+            break;
+        case 24:
+            print_approach4(&v);
+            break;
+        case 4:
+            sort_vector(&v);
+            break;
+        case 99:
+            break;
+        }
+	}while(choice != 99);
+	*/
     return 0;
 }
