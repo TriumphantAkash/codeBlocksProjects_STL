@@ -8,14 +8,14 @@ class ABC{
     char b;
 };
 
-class BA
 int main()
 {
     ABC abc;
     abc.a = 10;
     abc.b = 'a';
 
-    cout<<abc.a;
+    cout<<abc.a<<endl;
+    cout<<(abc.a)*10<<endl;
 
 
     return 0;

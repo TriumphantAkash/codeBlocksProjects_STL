@@ -14,11 +14,19 @@ public:
         size = strlen(str);
         s = new char[size];
         strcpy(s,str);
-        std::cout<<s<<std::endl;
+      //  std::cout<<s<<std::endl;
+    }
+
+    int operator*(int a){
+        int sum=0;
+        for(int i=0;i<size;i++){
+            sum+=s[i];
+        }
+        return sum*a;
     }
 
     void operator=(string ob){
-        std::cout<<"current s is:"<<s<<std::endl;
+        //std::cout<<"current s is:"<<s<<std::endl;
        // std::cout<<"passed string is:"<<ob<<std::endl;
         size = std::max(size,ob.size);
        // std::cout<<"new size is:"<<size<<std::endl;
@@ -27,13 +35,13 @@ public:
     }
 
     void operator+(string ob){
-        std::cout<<"current s is:"<<s<<std::endl;
+       // std::cout<<"current s is:"<<s<<std::endl;
        // std::cout<<"passed string is:"<<ob<<std::endl;
         size = size+ob.size;
-        std::cout<<"new size is:"<<size<<std::endl;
+       // std::cout<<"new size is:"<<size<<std::endl;
         //s = new char[size+5];
         strcat(s,ob.s);
-        std::cout<<"\nConcatnated String is: "<<s;
+      //  std::cout<<"\nConcatnated String is: "<<s;
     }
 
      bool operator==(string ob){
@@ -65,9 +73,8 @@ private:
     node<K, V>* buckets[NUM_OF_BUCKETS];
 
 public:
-    size_t hashFunc(K key){
-        std::hash<K> hasher;
-        return hasher(key);
+    unsigned long hashFunc(K key){
+        return key*314;
     }
 
     HashMap(){
@@ -78,8 +85,17 @@ public:
     }
 
     void insert(K key, V value){
-            int val = hashFunc(key)%100;
+            int val = hashFunc(key)%10;
             node<K, V>* temp = buckets[val];
+
+            if(buckets[val] == NULL){
+                node<K, V>* newNode = new node<K, V>();
+                newNode->key = key;
+                newNode->value = value;
+                newNode->next = NULL;
+                buckets[val] = newNode;
+                return;
+            }
 
             while(temp != NULL){
                 if(temp->key == key){
@@ -99,23 +115,23 @@ public:
             }
 
     }
-        /*
 
-        boolean find(string key){
-              int val = hash(key)%100;
-              struct node* temp = bucket[val];
+
+        V find(K key){
+              int val = hashFunc(key)%10;;
+              node<K, V>* temp = buckets[val];
 
 
               while(temp != NULL){
-                if(strcmp(temp->key,key) == 0){
-                    return true;
+                if(temp->key == key){
+                    return temp->value;
                 }
                 temp=temp->next;
               }
-              return false;
+              return temp->value;
 
         }
-
+/*
         void delete(string key){
             int val = hash(key)%100;
             struct node* temp = bucket[val];
@@ -144,8 +160,16 @@ public:
 int main()
 {
     HashMap<int, string> hashMap;
-    string str;
-    str.getstring("akash");
-    hashMap.insert(2,str);
+    string str1;
+    str1.getstring("akash");
+
+    string str2;
+    str2.getstring("ashesh");
+
+    hashMap.insert(2, str1);
+    hashMap.insert(3, str2);
+
+    std::cout<<"the output of find function is: "<<hashMap.find(2).s<<std::endl;
+
     return 0;
 }
