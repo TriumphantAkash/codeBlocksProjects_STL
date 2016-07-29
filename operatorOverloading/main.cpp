@@ -32,6 +32,16 @@ class string {
             return false;
         }
     }
+
+    void operator=(string ob){
+        std::cout<<"current s is:"<<s<<std::endl;
+       // std::cout<<"passed string is:"<<ob<<std::endl;
+        size = std::max(size,ob.size);
+        std::cout<<"new size is:"<<size<<std::endl;
+        s = new char[size+1];
+        strcpy(s,ob.s);
+    }
+
 };
 
 int main()
@@ -55,5 +65,8 @@ int main()
     }else{
         std::cout<<"unequal"<<std::endl;
     }
+
+    ob1 = ob2;
+    std::cout<<"now first string is: "<<ob1.s<<std::endl;
     return 0;
 }

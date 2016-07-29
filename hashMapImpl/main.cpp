@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string.h>
-using namespace std;
+
 ///////////////////////////////////////////////////
-#define NUM_OF_BUCKETS 100
+#define NUM_OF_BUCKETS 10
 
 //wrote a custom string class in order to overload == and + operator
 class string {
-    public:
+public:
     char *s;
     int size;
     void getstring(char *str)
@@ -15,6 +15,15 @@ class string {
         s = new char[size];
         strcpy(s,str);
         std::cout<<s<<std::endl;
+    }
+
+    void operator=(string ob){
+        std::cout<<"current s is:"<<s<<std::endl;
+       // std::cout<<"passed string is:"<<ob<<std::endl;
+        size = std::max(size,ob.size);
+       // std::cout<<"new size is:"<<size<<std::endl;
+        s = new char[size+1];
+        strcpy(s,ob.s);
     }
 
     void operator+(string ob){
@@ -35,12 +44,11 @@ class string {
         }
     }
 };
-
-template<typename K>
-unsigned int hashFunc(K key);   //need to define this function later
+   //need to define this function later
 
 template<typename K, typename V>
 class node{
+public:
     K key;
     V value;
     node* next;
@@ -57,6 +65,11 @@ private:
     node<K, V>* buckets[NUM_OF_BUCKETS];
 
 public:
+    size_t hashFunc(K key){
+        std::hash<K> hasher;
+        return hasher(key);
+    }
+
     HashMap(){
         node<K, V>* head = NULL;
         for(int i =0;i<NUM_OF_BUCKETS;i++){
@@ -67,24 +80,24 @@ public:
     void insert(K key, V value){
             int val = hashFunc(key)%100;
             node<K, V>* temp = buckets[val];
-/*
+
             while(temp != NULL){
-                if(strcmp(temp->key,key) == 0){
+                if(temp->key == key){
                     flag = true;
-                    strcpy(temp->value, value);
+                    temp->value = value;
                     break;
                 }
                 temp=temp->next;
             }
 
             if(flag == false){
-                struct node* newNode = (struct node*)malloc(sizeof(node));
-                strcpy(newNode->key, key);
-                strcpy(newNode->value,value);
+                node<K, V>* newNode = new node<K, V>();
+                newNode->key = key;
+                newNode->value = value;
                 newNode->next = NULL;
-                temp->next = newNode;
+                temp = newNode;
             }
-*/
+
     }
         /*
 
@@ -130,7 +143,9 @@ public:
 
 int main()
 {
-    HashMap<int, int> hashMap;
-    hashMap.insert(2,3);
+    HashMap<int, string> hashMap;
+    string str;
+    str.getstring("akash");
+    hashMap.insert(2,str);
     return 0;
 }
