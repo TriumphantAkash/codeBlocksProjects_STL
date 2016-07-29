@@ -84,21 +84,23 @@ public:
                 return;
             }
 
-            while(temp != NULL){
+            while(temp->next != NULL){
                 if(temp->key == key){
                     flag = true;
                     temp->value = value;
-                    break;
+                    return;
                 }
                 temp=temp->next;
             }
-
-            if(flag == false){
+            if(temp->key == key){
+                temp->value = value;
+                return;
+            }else{
                 node<K, V>* newNode = new node<K, V>();
                 newNode->key = key;
                 newNode->value = value;
                 newNode->next = NULL;
-                temp = newNode;
+                temp->next = newNode;
             }
 
     }
@@ -160,22 +162,49 @@ int main()
 {
     HashMap<int, string> hashMap;
     string str1;
-    str1.getstring("akash");
+    str1.getstring("Santa Clara");
 
     string str2;
-    str2.getstring("ashesh");
+    str2.getstring("San Antonio");
 
     string str3;
-    str3.getstring("ashutosh");
+    str3.getstring("San Jose");
 
+    string str12;
+    str12.getstring("Pheonix");
+
+    string str4;
+    str4.getstring("haha");
+    string str5;
+    str5.getstring("Agra");
+    string str6;
+    str6.getstring("Hyderabad");
+    string str7;
+    str7.getstring("Chennai");
+    string str8;
+    str8.getstring("Delhi");
+    string str9;
+    str9.getstring("Mumbai");
+    string str10;
+    str10.getstring("Singopore");
+    string str11;
+    str11.getstring("California");
     hashMap.insert(2, str1);
     hashMap.insert(3, str2);
     hashMap.insert(3, str3);
+    hashMap.insert(4, str3);
+    hashMap.insert(5, str4);
+    hashMap.insert(6, str5);
+    hashMap.insert(7, str6);
+    hashMap.insert(8, str7);
+    hashMap.insert(9, str8);
+    hashMap.insert(23, str9);
+
 
     std::cout<<"the output of find function is: "<<hashMap.find(3).s<<std::endl;
     std::cout<<"******************************"<<std::endl;
     hashMap.traverse();
-    hashMap.remove(2);
+    hashMap.remove(8);
     std::cout<<"******************************"<<std::endl;
     hashMap.traverse();
     return 0;
