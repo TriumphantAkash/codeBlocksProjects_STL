@@ -115,7 +115,7 @@ public:
             std::cout<<std::endl;
          }
     }
-        V find(K key){
+    V find(K key){
               int val = hashFunc(key)%10;;
               node<K, V>* temp = buckets[val];
 
@@ -128,28 +128,29 @@ public:
               }
               return temp->value;
 
-        }
-/*
-        void delete(string key){
-            int val = hash(key)%100;
-            struct node* temp = bucket[val];
-            struct node * prev = temp;
+    }
 
+    void remove(K key){
+            int val = hashFunc(key)%10;
+            if(buckets[val]->key==key){                //need to separately handle this case because head of list changes if want to delete the first element
+                node<K, V>* temp = buckets[val];
+                buckets[val] = buckets[val]->next;
+                delete temp;
+                return;
+            }
+            node<K, V>* temp = buckets[val];
+            struct node<K, V> * prev = temp;
             while(temp != NULL){
-                if(strcmp(temp->key,key) == 0){
-
-                    strucy node* temp1= temp->next;
-                    prev = temp1;
-                    free(temp->next);
-                    temp->next = temp1;
-                    break;
+                if(temp->key==key){
+                    prev->next = temp->next;
+                    delete temp;
+                    return;
                 }
                 prev = temp;
-                 temp=temp->next;
+                temp=temp->next;
             }
 
-        }
-        */
+    }
 
 
 };
@@ -174,6 +175,8 @@ int main()
     std::cout<<"the output of find function is: "<<hashMap.find(3).s<<std::endl;
     std::cout<<"******************************"<<std::endl;
     hashMap.traverse();
-
+    hashMap.remove(2);
+    std::cout<<"******************************"<<std::endl;
+    hashMap.traverse();
     return 0;
 }
